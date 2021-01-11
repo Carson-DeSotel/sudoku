@@ -55,11 +55,21 @@ class Board:
       s.add(r[index].value)
     return s 
   
-  def as_set_cell(self, row_offset, col_offset):
+  # def as_set_cell(self, row_offset, col_offset):
+  #   s = set()
+  #   for i in range(0, 3):
+  #     for j in range(0, 3):
+  #       s.add(self.board[row_offset + i][col_offset + j].value)
+  #   return s
+
+  def as_set_cell(self, index):
+    ro, co = index 
+    ro *= 3
+    co *= 3
     s = set()
     for i in range(0, 3):
       for j in range(0, 3):
-        s.add(self.board[row_offset + i][col_offset + j].value)
+        s.add(self.board[ro + i][co + j].value)
     return s
 
   def print_possibilities(self):
@@ -77,9 +87,7 @@ class Board:
           self.board[i][j].guess = t
           t = self.board[i][j].guess - self.as_set_col(j)
           self.board[i][j].guess = t  
-          ro = math.floor(i / 3)
-          co = math.floor(j / 3)
-          t = self.board[i][j].guess - self.as_set_cell(ro, co)
+          t = self.board[i][j].guess - self.as_set_cell(i, j)
           self.board[i][j].guess = t
 
   # NOTE: discard is used to avoid raising KeyErrors in case where
@@ -114,8 +122,6 @@ class Board:
 
     for i in range(0, 3):
       for j in range(0, 3):
-        ro = 3 * i 
-        co = 3 * j 
         if self.as_set_cell(ro, co) != _POSSIBLE:
           return False
   
